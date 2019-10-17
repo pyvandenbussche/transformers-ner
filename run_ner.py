@@ -207,25 +207,11 @@ def evaluate(args, model, tokenizer, labels, pad_token_label_id, mode, prefix=""
 
     label_map = {i: label for i, label in enumerate(labels)}
 
-    out_label_list = [[] for _ in range(out_label_ids.shape[0])]
-    preds_list = [[] for _ in range(out_label_ids.shape[0])]
-
-    for i in range(out_label_ids.shape[0]):
-        for j in range(out_label_ids.shape[1]):
-            if out_label_ids[i, j] != pad_token_label_id:
-                out_label_list[i].append(label_map[out_label_ids[i][j]])
-                preds_list[i].append(label_map[preds[i][j]])
-
-    results = {
-        "loss": eval_loss,
-        "precision": precision_score(out_label_list, preds_list),
-        "recall": recall_score(out_label_list, preds_list),
-        "f1": f1_score(out_label_list, preds_list)
-    }
+    results = {}
 
     # get result per label
     inv_label_map = {v: k for k, v in label_map.items()}
-    for lbl in set([lbl[2:].strip() for lbl in labels if len(lbl[2:].strip())>0]):
+    for lbl in set([lbl[2:].strip() for lbl in labels if len(lbl[2:].strip()) > 0]):
         lbl_map = label_map.copy()
         for k, v in inv_label_map.items():
             if len(k[2:].strip()) > 0 and k[2:].strip() != lbl:
@@ -242,6 +228,20 @@ def evaluate(args, model, tokenizer, labels, pad_token_label_id, mode, prefix=""
         results["{}-precision".format(lbl)] = precision_score(out_label_list, preds_list)
         results["{}-recall".format(lbl)] = recall_score(out_label_list, preds_list)
         results["{}-f1".format(lbl)] = f1_score(out_label_list, preds_list)
+
+    out_label_list = [[] for _ in range(out_label_ids.shape[0])]
+    preds_list = [[] for _ in range(out_label_ids.shape[0])]
+
+    for i in range(out_label_ids.shape[0]):
+        for j in range(out_label_ids.shape[1]):
+            if out_label_ids[i, j] != pad_token_label_id:
+                out_label_list[i].append(label_map[out_label_ids[i][j]])
+                preds_list[i].append(label_map[preds[i][j]])
+
+    results["loss"] = eval_loss
+    results["precision"] = precision_score(out_label_list, preds_list)
+    results["recall"] = recall_score(out_label_list, preds_list)
+    results["f1"] = f1_score(out_label_list, preds_list)
 
 
     logger.info("***** Eval results %s *****", prefix)
