@@ -1,4 +1,5 @@
 # transformers-ner
+[![Documentation Status](https://img.shields.io/badge/Blog-link_to_the_post-brightgreen.svg)](http://pyvandenbussche.info/2019/named-entity-recognition-with-pytorch-transformers/)
 
 Experiment on NER task using Huggingface state-of-the-art Natural Language Models
 
