@@ -38,11 +38,18 @@ def main():
     if not os.path.isfile(args.input_train_data) or not os.path.isfile(args.input_dev_data):
         raise ValueError("The input data file path ({} or {}) does not exist.".format(args.input_train_data, args.input_dev_data))
 
+    nb_train_sent = 0
+    nb_test_sent = 0
     fo = open(os.path.join(args.output_dir, "train.txt"), "w")
     for tempfile in [args.input_train_data, args.input_dev_data]:
         with open(tempfile, 'r') as fi:
             for line in fi:
+                # count the number of sentences
+                if len(line.strip()) == 0:
+                    nb_train_sent+=1
+                # change from tab separated to space separated as expected from BERT NER script
                 line = line.replace("\t", " ")
+                # filter out some tags in case we are performing singular tag NER
                 if args.keep_only_tag is not None:
                     splits = line.split()
                     if len(splits) > 1:
@@ -56,7 +63,12 @@ def main():
     fo = open(os.path.join(args.output_dir, "test.txt"), "w")
     with open(args.input_test_data, 'r') as fi:
         for line in fi:
+            # count the number of sentences
+            if len(line.strip()) == 0:
+                nb_test_sent += 1
+            # change from tab separated to space separated as expected from BERT NER script
             line = line.replace("\t", " ")
+            # filter out some tags in case we are performing singular tag NER
             if args.keep_only_tag is not None:
                 splits = line.split()
                 if len(splits) > 1:
@@ -66,6 +78,8 @@ def main():
             fo.write(line)
         # add new line at the end fo the file to break the sentence
         fo.write("\n")
+    print("Number of training sentences: {}".format(nb_train_sent))
+    print("Number of testing sentences: {}".format(nb_test_sent))
 
 if __name__ == "__main__":
     main()
