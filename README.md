@@ -39,14 +39,15 @@ python ./preprocess/generate_from_stanford.py --input_data ./data/StanfordNov19.
 
 The script ouputs two files `train.txt` and `test.txt` that will be the input of the NER pipeline.
 
-### NER pipeline
+### Download pre-trained model and run the NER task
+#### BERT
+Pre-trained models of BERT are automatically fetched by HuggingFace's transformers library.
 To execute the NER pipeline, run the following scripts:
 ```bash
-python ./run_ner.py --data_dir ./data --model_type bert --model_name_or_path bert-base-cased --output_dir ./output --labels ./data/labels.txt --do_train --do_predict --save_steps 200000 --max_seq_length 512 --overwrite_output_dir --overwrite_cache
+python ./run_ner.py --data_dir ./data --model_type bert --model_name_or_path bert-base-cased --output_dir ./output --labels ./data/labels.txt --do_train --do_predict --max_seq_length 256 --overwrite_output_dir --overwrite_cache
 ```
 The script will output the results and predictions in the output directory.
 
-### Download the pre-trained models
 #### SciBERT
 Download and unzip the model, vocab and its config. Rename config file to config.json as expected from the script.
 ```bash
@@ -57,6 +58,11 @@ tar -zxvf weights.tar.gz
 mv bert_config.json config.json
 rm weights.tar.gz
 ```
+To execute the NER pipeline, run the following scripts:
+```bash
+python ./run_ner.py --data_dir ./data --model_type bert --model_name_or_path scibert_scivocab_cased --output_dir ./output --labels ./data/labels.txt --do_train --do_predict --max_seq_length 256 --overwrite_output_dir --overwrite_cache
+```
+The script will output the results and predictions in the output directory.
 
 #### SpanBERT
 Download and unzip the model, vocab and its config. Rename config file to config.json as expected from the script.
@@ -69,3 +75,8 @@ cd spanbert_hf_base
 curl -Ol https://raw.githubusercontent.com/pyvandenbussche/transformers-ner/master/data/bert_large_cased_vocab.txt
 mv bert_large_cased_vocab.txt vocab.txt
 ```
+To execute the NER pipeline, run the following scripts:
+```bash
+python ./run_ner.py --data_dir ./data --model_type bert --model_name_or_path spanbert_hf_base --output_dir ./output --labels ./data/labels.txt --do_train --do_predict --max_seq_length 256 --overwrite_output_dir --overwrite_cache
+```
+The script will output the results and predictions in the output directory.
