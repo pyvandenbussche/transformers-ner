@@ -26,15 +26,23 @@ pip install -r requirements.txt
 
 ### Data Pre-processing
 
-#### From Stanford format
-The current pipeline is generating a Stanford NER compatible format. 
-We can start our experiment from this file. Small modifications should be applied 
-to the file so it can be processed by BERT NER. In particular the file do not use 
-`B-LABEL` and `I-LABEL` for teh first occurrence and following one of a label.
+#### Download the data
+The current `BC5CDR` dataset is available as IOB format. Small modifications should be applied 
+to the files so they can be processed by BERT NER (space separated elements, etc.). 
+We will first download the files and then transform them
 
-After putting the Stanford NER format file (e.g. `StanfordNov19.txt`) in `data` folder, execute the following command:
+Download the files at:
 ```bash
-python ./preprocess/generate_from_stanford.py --input_data ./data/StanfordNov19.txt --output_dir ./data/
+mkdir data-input
+curl -o data-input/devel.tsv https://raw.githubusercontent.com/cambridgeltl/MTL-Bioinformatics-2016/master/data/BC5CDR-IOB/devel.tsv
+curl -o data-input/train.tsv https://raw.githubusercontent.com/cambridgeltl/MTL-Bioinformatics-2016/master/data/BC5CDR-IOB/train.tsv
+curl -o data-input/test.tsv https://raw.githubusercontent.com/cambridgeltl/MTL-Bioinformatics-2016/master/data/BC5CDR-IOB/test.tsv
+
+```
+
+To transform the data in a BERT NER compatible format, execute the following command:
+```bash
+python ./preprocess/generate_dataset.py --input_train_data data-input/train.tsv --input_dev_data data-input/devel.tsv --input_test_data data-input/test.tsv --output_dir data-input/
 ```
 
 The script ouputs two files `train.txt` and `test.txt` that will be the input of the NER pipeline.
