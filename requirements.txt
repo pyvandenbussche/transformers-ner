@@ -1,7 +1,7 @@
 boto3==1.9.243
 numpy==1.15.4
 pandas==0.24.1
-protobuf==3.10.0
+protobuf==3.18.3
 requests==2.21.0
 regex==2019.8.19
 sentencepiece==0.1.83
