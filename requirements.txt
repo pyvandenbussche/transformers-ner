@@ -10,7 +10,7 @@ seqeval==0.0.12
 scikit-learn==0.21.3
 spacy==2.2.1
 tensorboardX==1.8
-torch==1.2.0
+torch==1.13.1
 torchvision==0.4.0
 tqdm==4.36.1
 transformers==2.1.0
